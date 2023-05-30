@@ -3,18 +3,27 @@ import TodoCreate from "./components/TodoCreate";
 import TodoList from "./components/TodoList";
 import TodoComputed from "./components/TodoComputed";
 import TodoFilter from "./components/TodoFilter";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-const initialStateTodos = [
-    { id: 1, title: "complete online javascript curse", completed: true },
-    { id: 2, title: "go to the gym", completed: false },
-    { id: 3, title: "10 minutos de meditacion", completed: false },
-    { id: 4, title: "Tarea # 4", completed: true },
-    { id: 5, title: "complete aplicacion TODO", completed: false },
-];
+// const initialStateTodos = [
+//     { id: 1, title: "complete online javascript curse", completed: true },
+//     { id: 2, title: "go to the gym", completed: false },
+//     { id: 3, title: "10 minutos de meditacion", completed: false },
+//     { id: 4, title: "Tarea # 4", completed: true },
+//     { id: 5, title: "complete aplicacion TODO", completed: false },
+// ];
+
+const initialStateTodos = JSON.parse(localStorage.getItem("todos")) || [];
 
 const App = () => {
     const [todos, setTodos] = useState(initialStateTodos);
+
+    //Se puede crear el metodo utilizando useEffect de manera que cada vez que se realice
+    //un cambio en el objeto todos va a colocar en consola "todos"
+    //En formato JSON es un string que se puede guardar en la variable localStorage "todos"
+    useEffect(() => {
+        localStorage.setItem("todos", JSON.stringify(todos));
+    }, [todos]);
 
     //se crea un metodo que recibe como argumento el titulo de la tarea
     //adentro se genera un objeto NewTodo con los campos id,title y completed
@@ -71,10 +80,10 @@ const App = () => {
 
     return (
         <>
-            <div className="min-h-screen bg-gray-300 bg-[url('./assets/images/bg-mobile-light.jpg')] bg-contain bg-no-repeat  dark:bg-gray-900 dark:bg-[url('./assets/images/bg-mobile-dark.jpg')]">
+            <div className="min-h-screen bg-gray-300 bg-[url('./assets/images/bg-mobile-light.jpg')] bg-contain bg-no-repeat  dark:bg-gray-900 dark:bg-[url('./assets/images/bg-mobile-dark.jpg')]  md:bg-[url('./assets/images/bg-desktop-light.jpg')] md:dark:bg-[url('./assets/images/bg-desktop-dark.jpg')]">
                 <Header></Header>
 
-                <main className="container mx-auto mt-8 px-4">
+                <main className="container mx-auto mt-8 px-4 md:max-w-xl">
                     <TodoCreate createTodo={createTodo}></TodoCreate>
                     <TodoList
                         todos={filteredTodos()}
